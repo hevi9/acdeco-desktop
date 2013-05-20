@@ -17,6 +17,12 @@ UUID = "350da82e-c15a-11e2-949e-001e4fbfb714"
 #UUID = "00001101-0000-1000-8000-00805F9B34FB"
 
 
+def xte(*args):
+  cmd = ["xte"]
+  cmd.extend(args)
+  D(" ".join(cmd))
+  sp.check_call(cmd)
+
 class DesktopControl(object):
   
   def __init__(self):
@@ -38,8 +44,18 @@ class Proto(object):
           D("Connection close")
           break
         D("DATA: %d" % ord(data[0]))
+        self.handle_sig(data[0])
     except IOError, ex:
       D("Exception %s" % str(ex))
+
+  def handle_sig(self,sig):
+    if sig == "R":
+      xte("key Page_Down")
+    elif sig == "L":
+      xte("key Page_Up")
+    else:
+      D("Unknown signal %s" % sig)
+      
 
 class BTServer(object):
   """

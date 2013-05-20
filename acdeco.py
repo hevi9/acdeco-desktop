@@ -12,6 +12,10 @@ D = log.debug
 import bluetooth as bt
 import subprocess as sp
 
+SERVICE = "ACDECO"
+#UUID = "350da82e-c15a-11e2-949e-001e4fbfb714"
+UUID = "00001101-0000-1000-8000-00805F9B34FB"
+
 
 class DesktopControl(object):
   
@@ -20,8 +24,21 @@ class DesktopControl(object):
 
 class Proto(object):
   
-  def __init__(self):
-    pass
+  def __init__(self, socket):
+    self._socket = socket
+    self._control = DesktopControl()
+
+  def communicate_to_end(self):
+    try:
+      while True:
+        D("Receiving data ..")
+        data = self._socket.recv(1024) # BLOCK
+        if len(data) == 0:
+          D("Connection close")
+          break
+        D("DATA: %s" % data)
+    except IOError, ex:
+      D("Exception %s" % str(ex))
 
 class BTServer(object):
   """
@@ -30,12 +47,27 @@ class BTServer(object):
   """
   
   def __init__(self):
-    pass
+    self._server_socket = s = bt.BluetoothSocket(bt.RFCOMM)
+    s.bind(("",bt.PORT_ANY))
+    s.listen(1)
+    self._port = s.getsockname()[1]
+    D("Advertising service %s" % SERVICE)
+    bt.advertise_service(s,SERVICE,
+      service_id = UUID,
+      service_classes = [UUID, bt.SERIAL_PORT_CLASS],
+      profiles = [bt.SERIAL_PORT_PROFILE]
+      )
   
   def serve_forever(self):
-    pass
+    while True:
+      D("Waiting new RFCOMM connection on channel %d" % self._port)
+      conn_sock, conn_info = self._server_socket.accept() # BLOCK
+      D("New connction from %s" % conn_info)
+      proto = Proto(conn_sock)
+      proto.communicate_to_end() # BLOCK
 
 def main():
+  logging.basicConfig(level=logging.DEBUG)
   server = BTServer()
   server.serve_forever()
 

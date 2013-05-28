@@ -1,0 +1,212 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing onehalf
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Accelerated Desktop Control -- acdeco
+\end_layout
+
+\begin_layout Author
+Petri Heinilä
+\begin_inset Newline newline
+\end_inset
+
+0035087
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+To use desktop computer by smart-phone with hand movements 
+\end_layout
+
+\begin_layout Standard
+Without touchscreen display
+\end_layout
+
+\begin_layout Standard
+Why not use touchscreen display ?
+\end_layout
+
+\begin_layout Standard
+Display uses big fraction of smart-phone power 
+\end_layout
+
+\begin_layout Standard
+Aggressive power saving => need to open/unlock phone continuously Need to
+ watch smart-phone screen 
+\end_layout
+
+\begin_layout Standard
+By nature control signal messages are trivial and does not really need touch-scr
+een manipulation
+\end_layout
+
+\begin_layout Standard
+Audience
+\end_layout
+
+\begin_layout Standard
+Plain desktop user with smart-phone – short distance remote control 
+\end_layout
+
+\begin_layout Standard
+User with multi-media computer – medium distance remote control
+\end_layout
+
+\begin_layout Section
+Design
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename acdeco-deployment.png
+	width 99col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Systems parts
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Implementation
+\end_layout
+
+\begin_layout Standard
+Implementation “Challenges”
+\end_layout
+
+\begin_layout Standard
+Linux desktop 
+\end_layout
+
+\begin_layout Standard
+Python 2.7 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "vanrossum93introduction"
+
+\end_inset
+
+because PyBluez is dead and Python 3.3 does not support bluetooth discovery
+ 
+\end_layout
+
+\begin_layout Standard
+12h debugging for: /etc/bluetooth/main.conf: DisablePlugins = pnat, to get
+ RFCOMM to work 
+\end_layout
+
+\begin_layout Standard
+Android 4.1.2 SIGSEGV on bluetooth socket close() => no proper disconnection
+ management
+\end_layout
+
+\begin_layout Standard
+Application application management
+\end_layout
+
+\begin_layout Section
+Conclusions
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "acdeco"
+options "bibtotoc,plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

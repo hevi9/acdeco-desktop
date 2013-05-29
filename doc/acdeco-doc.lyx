@@ -77,6 +77,20 @@ Introduction
 \end_layout
 
 \begin_layout Standard
+Idea with Accelerated Desktop Control (acdeco) is to remote control desktop-
+ or other fixed computer via wireless radio channel.
+ Control inputs are constructed on mobile device, smart-phone, by sensing
+ movement or position of the device.
+ 
+\end_layout
+
+\begin_layout Standard
+The emphasis in input design is not to use conventional mobile device touch-scre
+en display.
+ 
+\end_layout
+
+\begin_layout Standard
 To use desktop computer by smart-phone with hand movements 
 \end_layout
 

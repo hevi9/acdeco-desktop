@@ -87,45 +87,42 @@ Idea with Accelerated Desktop Control (acdeco) is to remote control desktop-
 \begin_layout Standard
 The emphasis in input design is not to use conventional mobile device touch-scre
 en display.
- 
+ Use of the touch-screen display requires user visual attention, and on
+ the remote control situations the user attention is on the target device,
+ the desktop computer display.
+ Therefore the control input sensing should relate only for user hand activity.
 \end_layout
 
 \begin_layout Standard
-To use desktop computer by smart-phone with hand movements 
+Mobile device runs on a limited battery energy.
+ The touch-screen display energy consumption is markable, usually second
+ in device operations after wireless connections.
+ This makes two effects in use.
+ First mobile device energy saving activity is aggressive, constantly disabling
+ the touch-screen display.
+ User would need to turn the display continuous on, if using remote control
+ through display.
+ Second if display would be continuously on, the energy drain would shorten
+ the mobile device activity time considerably.
 \end_layout
 
 \begin_layout Standard
-Without touchscreen display
+Also, by nature control signal messages are trivial and does not really
+ need touch-screen manipulation.
 \end_layout
 
 \begin_layout Standard
-Why not use touchscreen display ?
+Targeted audience for acdeco are desktop or laptop users carrying mobile
+ device along them.
+ The mobile device provides additional input methods for controlling desktop.
+ Also short range controlling of the fixed device is feasible, eg.
+ controlling slide-show presentation on laptop computer.
 \end_layout
 
 \begin_layout Standard
-Display uses big fraction of smart-phone power 
-\end_layout
-
-\begin_layout Standard
-Aggressive power saving => need to open/unlock phone continuously Need to
- watch smart-phone screen 
-\end_layout
-
-\begin_layout Standard
-By nature control signal messages are trivial and does not really need touch-scr
-een manipulation
-\end_layout
-
-\begin_layout Standard
-Audience
-\end_layout
-
-\begin_layout Standard
-Plain desktop user with smart-phone – short distance remote control 
-\end_layout
-
-\begin_layout Standard
-User with multi-media computer – medium distance remote control
+Another audience group is multi-media computer user for the entertainment
+ content.
+ The acdeco would replace conventional remote control device.
 \end_layout
 
 \begin_layout Section
@@ -133,10 +130,25 @@ Design
 \end_layout
 
 \begin_layout Standard
+On 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Systems-parts"
+
+\end_inset
+
+ is presented the system functional parts.
+ The deployment of the acdeco system is divided into two areas desktop-side
+ and mobile-side.
+ 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -153,6 +165,13 @@ status collapsed
 
 \begin_layout Plain Layout
 Systems parts
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Systems-parts"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -160,13 +179,131 @@ Systems parts
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Desktop-side
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+acdeco-desktop
+\series default
+ is a application specific program.
+ The program works as a server in communication where mobile side connects.
+ The programs communicates the mobile-side and decodes the control messages.
+ For a control message external program, xte, is called.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+xte
+\series default
+ is a external program from xautomation package.
+ xte generates XTEST 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "xtest"
+
+\end_inset
+
+message that can be used to feed synthetic X11 input events.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+X11
+\series default
+ is a display server with XTEST protocol extension.
+ X11 holds the application windows that are to be remote controlled.
+\end_layout
+
+\begin_layout Subsection
+Mobile-side
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+acdeco-android
+\series default
+ is program on mobile device that handles sensor reading, sensor data interpreti
+ng, converting sensor signals into control messages and bluetooth RFCOMM
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bluetooth"
+
+\end_inset
+
+communication handling.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+sensor
+\series default
+ provides sensor sample flow.
+ Accelerometer sensors are used.
+\end_layout
+
+\begin_layout Subsection
+Protocol design
+\end_layout
+
+\begin_layout Standard
+The developed and used protocol in acdeco is SASCII (Stupid American Standard
+ Code for Information Interchange).
+ The messages interchanged in remote control operation are signal type message
+ carrying no payload information.
+ Two types messages are needed protocol flow control messages and remote
+ control messages.
+ The assumed amount of produced mobile device inputs is under 200 so under
+ 200 control messages are needed.
+\end_layout
+
+\begin_layout Standard
+Used underlaying protocol is RFCOMM
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bluetooth"
+
+\end_inset
+
+ transport layer in a Bluetooth stack.
+\end_layout
+
+\begin_layout Standard
+Message boundary on SASCII is one octet containing code for flow- or control
+ message.
+\end_layout
+
+\begin_layout Standard
+SASCII is a extension from ASCII protocol codes where codes 32dec -- 255dec
+ are used for signal messages and 0dec -- 31dec are for flow messages.
+ Flow messages follow ASCII protocol code semantics.
+ Semantics for control messages are free, but it is recommend to use ASCII
+ code that related produced input in desktop-side.
+ For example if space character is assigned to the controlled desktop applicatio
+n then ASCII code 32dec should be used for that.
+\end_layout
+
+\begin_layout Standard
+For flow messages the ASCII SYN 22dec, synchronous idle, is used for connection
+ opening and device vicinity heartbeat signaling.
+ On heartbeat signaling both devices send SYN message once a second, and
+ if receiving device does not get SYN message inside second time frame the
+ connection is considered disconnected.
+ This is because transport layer, RFCOMM, SAP (Service Access Point), socket
+ API, does not provide interface to react transport messaging or timeouts.
 \end_layout
 
 \begin_layout Section
@@ -174,37 +311,63 @@ Implementation
 \end_layout
 
 \begin_layout Standard
-Implementation “Challenges”
-\end_layout
-
-\begin_layout Standard
-Linux desktop 
-\end_layout
-
-\begin_layout Standard
-Python 2.7 
+Desktop-side implementation was done with Python 2.7 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "vanrossum93introduction"
 
 \end_inset
 
-because PyBluez is dead and Python 3.3 does not support bluetooth discovery
- 
+ language.
+ PyBlues python module was used for bluetooth connectivity for RFCOMM transport
+ and SDP
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bluetooth"
+
+\end_inset
+
+ service advertising.
+ PyBluez was the reason to use old python 2.7 instead python 3.3, because
+ PyBluez development is dead (latest update 2009) and was not ported to
+ python 3+ series.
 \end_layout
 
 \begin_layout Standard
-12h debugging for: /etc/bluetooth/main.conf: DisablePlugins = pnat, to get
- RFCOMM to work 
+xte command line tool from xautomation debian package was used to send XTEST
+ requests to the X11 server.
 \end_layout
 
 \begin_layout Standard
-Android 4.1.2 SIGSEGV on bluetooth socket close() => no proper disconnection
- management
+On mobile-side android 4.1.2 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "android"
+
+\end_inset
+
+environment with Java language
+\begin_inset CommandInset citation
+LatexCommand cite
+key "java"
+
+\end_inset
+
+ was used to implemeny acdeco-android part.
 \end_layout
 
 \begin_layout Standard
-Application application management
+Linux distribution for bluetooth management was problematic.
+ At first RFCOMM was not working.
+ After resolving problem the solution was to set: /etc/bluetooth/main.conf:
+ DisablePlugins = pnat, to get RFCOMM to work.
+ Resolving this take about 12 hours time.
+\end_layout
+
+\begin_layout Standard
+On android side, there was problem, the program did SIGSEGV on bluetooth
+ socket close().
+ Therefore no proper disconnection management were implemented.
 \end_layout
 
 \begin_layout Section
@@ -212,10 +375,16 @@ Conclusions
 \end_layout
 
 \begin_layout Standard
+The demonstration program showed out the viability to use mobile device
+ movement sensors in remote controlling of fixed computers without used
+ touch-screen attention.
+\end_layout
+
+\begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
 bibfiles "acdeco"
-options "bibtotoc,plain"
+options "bibtotoc,plainnat"
 
 \end_inset
 

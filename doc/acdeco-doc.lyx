@@ -371,6 +371,71 @@ On android side, there was problem, the program did SIGSEGV on bluetooth
 \end_layout
 
 \begin_layout Section
+Usage
+\end_layout
+
+\begin_layout Standard
+Software is currently at experimental prototype state for demonstration.
+\end_layout
+
+\begin_layout Standard
+Requirements:
+\end_layout
+
+\begin_layout Itemize
+Linux desktop computer
+\end_layout
+
+\begin_layout Itemize
+Python 2.7
+\end_layout
+
+\begin_layout Itemize
+PyBluez python library
+\end_layout
+
+\begin_layout Itemize
+xautomation package from debian based distribution
+\end_layout
+
+\begin_layout Itemize
+Android 4.1.2 device
+\end_layout
+
+\begin_layout Itemize
+Eclipse
+\end_layout
+
+\begin_layout Itemize
+Eclipse ADT plugin
+\end_layout
+
+\begin_layout Itemize
+Android SDK
+\end_layout
+
+\begin_layout Standard
+..
+ and setups for these components, especially eclipse android with 4.1.2 api.
+\end_layout
+
+\begin_layout Standard
+On linux desktop computer run acdeco-desktop/acdeco.py
+\end_layout
+
+\begin_layout Standard
+On eclipse
+\end_layout
+
+\begin_layout Itemize
+import acdeco project
+\end_layout
+
+\begin_layout Itemize
+run it on connected mobile android device
+\end_layout
+
+\begin_layout Section
 Conclusions
 \end_layout
 
